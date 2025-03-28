@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <title>SRT Shifter - Dual View</title>
@@ -7,12 +8,14 @@
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      padding-top: 130px; /* space for fixed top bar */
+      padding-top: 130px;
+      /* space for fixed top bar */
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
     }
+
     /* Fixed top controls bar */
     #controls {
       position: fixed;
@@ -24,49 +27,66 @@
       border-bottom: 1px solid #ccc;
       z-index: 1000;
     }
+
     .control-row {
       margin-bottom: 5px;
     }
-    #controls button, #controls input {
+
+    #controls button,
+    #controls input {
       margin-right: 5px;
       padding: 5px 10px;
     }
+
     /* Main container for dual panes */
     #mainContainer {
       display: flex;
       height: calc(100vh - 130px);
     }
-    #editPane, #refPane {
+
+    #editPane,
+    #refPane {
       width: 50%;
       overflow-y: auto;
       padding: 10px;
       box-sizing: border-box;
     }
+
     #refPane {
       border-left: 1px solid #ccc;
     }
+
     h1 {
       margin: 10px 0;
     }
+
     table {
       border-collapse: collapse;
       width: 100%;
       margin-top: 10px;
     }
-    th, td {
+
+    th,
+    td {
       border: 1px solid #ccc;
       padding: 8px;
       text-align: left;
     }
+
     tr:hover {
       cursor: pointer;
       background-color: #f0f0f0;
     }
+
     tr.selected {
       background-color: #d0eaff;
     }
+
     /* Disable text selection for table elements */
-    table, tr, td, th {
+    table,
+    tr,
+    td,
+    th {
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
@@ -74,63 +94,94 @@
     }
 
     /* CSS for Frequent Buttons */
-.frequent-button1 {
-  background-color: #4CAF50; /* Green background */
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
+    .frequent-button {
+      padding: 8px 16px;
+      border-radius: 3px;
+      cursor: pointer;
 
-}
-.frequent-button2 {
-  background-color: #de8a24; /* Green background */
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-}
+    }
 
-.frequent-button3 {
-  background-color: #0f48e6; /* Green background */
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.frequent-button1:hover {
-  background-color: #45a049;
-}
+    #shiftUpBtn,
+    #shiftDownBtn {
+      background-color: #4CAF50;
+      /* Green background */
+      color: white;
+      border: solid 2px #4CAF50;
+    }
 
-.frequent-button2:hover {
-  background-color: #b57629; /* Green background */
-}
+    #shiftUpBtn:hover,
+    #shiftDownBtn:hover {
+      background-color: #45a049;
+    }
+    
 
-.frequent-button3:hover {
-  background-color: #b57629; /* Green background */
-}
+    #mergeBtn {
+      background-color: #de8a24;
+      /* Green background */
+      color: white;
+      border: solid 2px #de8a24;
+    }
+
+    #mergeBtn:hover {
+      background-color: #b57629;
+      border: solid 2px #ac6712;
+      /* Green background */
+    }
+
+    #nextBlankBtn {
+      background-color: #0f48e6;
+      /* Green background */
+      color: white;
+      border: solid 2px #0f48e6;
+    }
+
+    #nextBlankBtn:hover {
+      
+      background-color: #0f41cd;
+      border: solid 2px #0b36ab;
+      /* Green background */
+    }
+
+
+     
+    #exportBtn {
+      background-color: #f02d1f;
+      border: solid 2px #f02d1f;
+      color:white;
+      border-radius: 2px;
+      /* Green background */
+    }
+    #exportBtn:hover {
+      background-color: #de1507;
+      border: solid 2px #de1507;
+      /* Green background */
+    }
   </style>
 </head>
+
 <body>
   <!-- Fixed top bar (controls apply to Edit View) -->
   <div id="controls">
-   
+
     <!-- Row 2: Shift, Merge, Insert -->
     <div class="control-row">
-      <button class="frequent-button1" id="shiftUpBtn">上移</button>
-      <button class="frequent-button1" id="shiftDownBtn">下移</button>
-      <button class="frequent-button2" id="mergeBtn">合併</button>
-      <button id="insertAboveBtn">上方插入</button>
-      <button id="insertBelowBtn">下方插入</button>
+      <button class="frequent-button" id="shiftUpBtn">上移</button>
+      <button class="frequent-button" id="shiftDownBtn">下移</button>
+      <button class="frequent-button" id="mergeBtn">合併</button>
+      <button class="frequent-button" id="nextBlankBtn">下個空白處</button>
+      <button  id="deselectBtn">取消選擇</button>
     </div>
     <!-- Row 3: Deselect, Undo, Redo, Next Blank -->
     <div class="control-row">
-      <button id="deselectBtn">取消選擇</button>
+      
       <button id="undoBtn">復原</button>
       <button id="redoBtn">重做</button>
-      <button class="frequent-button3" id="nextBlankBtn">下個空白處</button>
+      <button id="insertAboveBtn">上方插入</button>
+      <button id="insertBelowBtn">下方插入</button>
+     
+    </div>
+    <div>
+      <button class="frequent-button" id="exportBtn">輸出SRT</button>
     </div>
   </div>
 
@@ -140,11 +191,11 @@
     <div id="editPane">
       <h1>編輯中字幕</h1>
       <div id="editTableContainer">
-         <!-- Row 1: Load (Edit) and Export -->
-    <div class="control-row">
-      <input type="file" id="fileInput" accept=".srt">
-      <button id="exportBtn">輸出SRT</button>
-    </div>
+        <!-- Row 1: Load (Edit) and Export -->
+        <div class="control-row">
+          <input type="file" id="fileInput" accept=".srt">
+         
+        </div>
       </div>
     </div>
     <!-- Reference View (right pane) -->
@@ -163,6 +214,16 @@
     let redoStack = [];
     let lastClickedIndex = null; // For shift+click selection (Edit view)
     let lastBlankIndexFound = -1; // For cycling through blank lines (Edit view)
+
+    window.addEventListener('beforeunload', function (e) {
+    // Confirmation message (modern browsers usually ignore custom text)
+    var confirmationMessage = '資料將被清除，請確認是否重新整理';
+
+    // Standard method to show confirmation dialog
+    (e || window.event).returnValue = confirmationMessage;
+    return confirmationMessage; // Some browsers require return
+});
+
 
     // Parse SRT content into an array of subtitle objects.
     // Preserves empty lines.
@@ -189,7 +250,7 @@
       const container = document.getElementById('editTableContainer');
       container.innerHTML = "";
       if (!subtitles.length) return;
-      
+
       const table = document.createElement('table');
       const thead = document.createElement('thead');
       const headerRow = document.createElement('tr');
@@ -200,7 +261,7 @@
       });
       thead.appendChild(headerRow);
       table.appendChild(thead);
-      
+
       const tbody = document.createElement('tbody');
       subtitles.forEach((sub, i) => {
         const tr = document.createElement('tr');
@@ -212,7 +273,7 @@
           <td>${sub.text.replace(/\n/g, '<br>')}</td>
         `;
         // Enable shift+click selection in Edit View.
-        tr.addEventListener('click', function(e) {
+        tr.addEventListener('click', function (e) {
           const currentIndex = parseInt(tr.dataset.index, 10);
           if (e.shiftKey && lastClickedIndex !== null) {
             const start = Math.min(lastClickedIndex, currentIndex);
@@ -239,7 +300,7 @@
       const container = document.getElementById('refTableContainer');
       container.innerHTML = "";
       if (!refSubtitles.length) return;
-      
+
       const table = document.createElement('table');
       const thead = document.createElement('thead');
       const headerRow = document.createElement('tr');
@@ -250,7 +311,7 @@
       });
       thead.appendChild(headerRow);
       table.appendChild(thead);
-      
+
       const tbody = document.createElement('tbody');
       refSubtitles.forEach((sub, i) => {
         const tr = document.createElement('tr');
@@ -492,11 +553,11 @@
     }
 
     // File input event for Edit view.
-    document.getElementById('fileInput').addEventListener('change', function(e) {
+    document.getElementById('fileInput').addEventListener('change', function (e) {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(evt) {
+        reader.onload = function (evt) {
           subtitles = parseSRT(evt.target.result);
           undoStack = [];
           redoStack = [];
@@ -509,11 +570,11 @@
     });
 
     // File input event for Reference view.
-    document.getElementById('refFileInput').addEventListener('change', function(e) {
+    document.getElementById('refFileInput').addEventListener('change', function (e) {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(evt) {
+        reader.onload = function (evt) {
           refSubtitles = parseSRT(evt.target.result);
           renderRefTable();
         };
@@ -534,4 +595,5 @@
     document.getElementById('exportBtn').addEventListener('click', exportSRT);
   </script>
 </body>
+
 </html>
